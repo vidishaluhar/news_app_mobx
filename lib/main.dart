@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_app_mobx/Pages/news_page.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -36,10 +38,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  int cIndex = 0;
+
+  List<Widget> pages=[
+    NewsPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(child: ),
+    return Scaffold(
+      body: pages[cIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 25,
+        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+        selectedFontSize: 18,
+        selectedItemColor: Colors.teal,
+        type: BottomNavigationBarType.fixed,
+        selectedIconTheme:
+            IconThemeData(color: Colors.teal, size: 25, shadows: [
+          Shadow(color: Colors.tealAccent, offset: Offset(1, 0), blurRadius: 75),
+          Shadow(color: Colors.white, offset: Offset(1, 0), blurRadius: 75)
+        ]),
+        onTap: (value) {
+          setState(() {
+            cIndex = value;
+          });
+        },
+        currentIndex: cIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.newspaper),
+            label: "News",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: "Favourites"),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings")
+        ],
+      ),
     );
   }
 }
