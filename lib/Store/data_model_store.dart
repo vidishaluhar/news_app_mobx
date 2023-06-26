@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app_mobx/Fetch%20Data/fetch_data_from_api.dart';
 import 'package:news_app_mobx/Model/data_model.dart';
@@ -13,6 +14,25 @@ abstract class _DataModelStore with Store
   @observable
   DataModel? selectedItem;
 
+  @observable
+  bool isFavourite=false;
+
+  @observable
+  ObservableList<DataModel> listFavourites=ObservableList<DataModel>.of([]);
+
+  @action
+  void addfavourites(DataModel item)
+  {
+    listFavourites.add(item);
+    debugPrint("$listFavourites");
+  }
+
+  @action
+  void setFavourite()
+  {
+    isFavourite=!isFavourite;
+  }
+
   @action
   Future fetchData() => listOfDataFromFuture=ObservableFuture(dataModelApi.getDataFromApi().then((data) => data));
 
@@ -24,6 +44,8 @@ abstract class _DataModelStore with Store
   @action
   void onItemSelected(DataModel item)
   {
+    // debugPrint("${item.images}");
     selectedItem=item;
+    // debugPrint("-------${selectedItem?.images}");
   }
 }

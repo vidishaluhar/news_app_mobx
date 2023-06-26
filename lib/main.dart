@@ -25,7 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<DataModelStore>(create: (context) => DataModelStore(),)
+        Provider<DataModelStore>(
+          create: (context) => DataModelStore(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -33,32 +35,25 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: MyHomePage(),
+        home: const MyHomePage(),
         debugShowCheckedModeBanner: false,
-        routes: {
-          '/SelectedNews' : (context) => SelectedNewsPage()
-        },
+        routes: {'/SelectedNews': (context) => const SelectedNewsPage()},
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int cIndex = 0;
 
-  List<Widget> pages=[
-    NewsPage(),
-    FavouritesPage(),
-    SettingsPage()
-  ];
+  List<Widget> pages = [const NewsPage(), const FavouritesPage(), const SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Colors.teal,
         type: BottomNavigationBarType.fixed,
         selectedIconTheme:
-            IconThemeData(color: Colors.teal, size: 25, shadows: [
-          Shadow(color: Colors.tealAccent, offset: Offset(1, 0), blurRadius: 75),
+            const IconThemeData(color: Colors.teal, size: 25, shadows: [
+          Shadow(
+              color: Colors.tealAccent, offset: Offset(1, 0), blurRadius: 75),
           Shadow(color: Colors.white, offset: Offset(1, 0), blurRadius: 75)
         ]),
         onTap: (value) {
@@ -81,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         currentIndex: cIndex,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.newspaper),
             label: "News",

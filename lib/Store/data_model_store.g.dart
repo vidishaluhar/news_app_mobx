@@ -42,8 +42,62 @@ mixin _$DataModelStore on _DataModelStore, Store {
     });
   }
 
+  late final _$isFavouriteAtom =
+      Atom(name: '_DataModelStore.isFavourite', context: context);
+
+  @override
+  bool get isFavourite {
+    _$isFavouriteAtom.reportRead();
+    return super.isFavourite;
+  }
+
+  @override
+  set isFavourite(bool value) {
+    _$isFavouriteAtom.reportWrite(value, super.isFavourite, () {
+      super.isFavourite = value;
+    });
+  }
+
+  late final _$listFavouritesAtom =
+      Atom(name: '_DataModelStore.listFavourites', context: context);
+
+  @override
+  ObservableList<DataModel> get listFavourites {
+    _$listFavouritesAtom.reportRead();
+    return super.listFavourites;
+  }
+
+  @override
+  set listFavourites(ObservableList<DataModel> value) {
+    _$listFavouritesAtom.reportWrite(value, super.listFavourites, () {
+      super.listFavourites = value;
+    });
+  }
+
   late final _$_DataModelStoreActionController =
       ActionController(name: '_DataModelStore', context: context);
+
+  @override
+  void addfavourites(DataModel item) {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.addfavourites');
+    try {
+      return super.addfavourites(item);
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFavourite() {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.setFavourite');
+    try {
+      return super.setFavourite();
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   Future<dynamic> fetchData() {
@@ -71,7 +125,9 @@ mixin _$DataModelStore on _DataModelStore, Store {
   String toString() {
     return '''
 listOfDataFromFuture: ${listOfDataFromFuture},
-selectedItem: ${selectedItem}
+selectedItem: ${selectedItem},
+isFavourite: ${isFavourite},
+listFavourites: ${listFavourites}
     ''';
   }
 }

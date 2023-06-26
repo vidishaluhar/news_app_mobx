@@ -3,16 +3,15 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app_mobx/Model/data_model.dart';
 import 'package:news_app_mobx/Store/data_model_store.dart';
+import 'package:provider/provider.dart';
 
 class NewsPage extends StatelessWidget {
-  NewsPage({super.key}) {
-    dataModelStore.getData();
-  }
-
-  DataModelStore dataModelStore = DataModelStore();
+  const NewsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final dataModelStore = context.read<DataModelStore>();
+    dataModelStore.getData();
     final futureList = dataModelStore.listOfDataFromFuture;
     return Scaffold(
       appBar: AppBar(
@@ -66,16 +65,19 @@ class NewsPage extends StatelessWidget {
                     debugPrint("$data");
                     return ListTile(
                       leading: LayoutBuilder(
-                        builder: (BuildContext context, BoxConstraints constraints) {
-                          final double availableHeight=constraints.maxHeight;
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          final double availableHeight = constraints.maxHeight;
                           debugPrint("$availableHeight");
-                          final imageHeight=availableHeight*0.75;
-                          debugPrint("${imageHeight}");
-                          debugPrint("${imageHeight/25}");
+                          final imageHeight = availableHeight * 0.75;
+                          debugPrint("$imageHeight");
+                          debugPrint("${imageHeight / 25}");
                           return FractionallySizedBox(
-                            heightFactor: imageHeight/25,
+                            heightFactor: imageHeight / 25,
                             child: Image.network(
-                              data.images,width: 125,height: 100,
+                              data.images,
+                              width: 125,
+                              height: 100,
                               fit: BoxFit.cover,
                             ),
                           );
@@ -98,9 +100,9 @@ class NewsPage extends StatelessWidget {
                                     EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 0))),
                             onPressed: () {
-                                dataModelStore.onItemSelected(listOfData[index]);
-                                debugPrint(dataModelStore.selectedItem!.images);
-                                Navigator.pushNamed(context, '/SelectedNews',arguments: dataModelStore.selectedItem);
+                              dataModelStore.onItemSelected(listOfData[index]);
+                              // debugPrint(dataModelStore.selectedItem?.images);
+                              Navigator.pushNamed(context, '/SelectedNews');
                             },
                             child: const Text("read more",
                                 style: TextStyle(

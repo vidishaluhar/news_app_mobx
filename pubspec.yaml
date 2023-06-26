@@ -39,6 +39,7 @@ dependencies:
   flutter_mobx:
   provider:
   json_annotation: ^4.8.1
+  http: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -53,7 +54,7 @@ dev_dependencies:
   build_runner:
   mobx_codegen:
   json_serializable:
-  http: ^1.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
