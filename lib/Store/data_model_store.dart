@@ -20,10 +20,21 @@ abstract class _DataModelStore with Store
   @observable
   ObservableList<DataModel> listFavourites=ObservableList<DataModel>.of([]);
 
+  String? itemMsg;
+
   @action
   void addfavourites(DataModel item)
   {
-    listFavourites.add(item);
+
+    if(listFavourites.contains(item))
+      {
+        itemMsg="Item already in the List";
+      }
+    else
+      {
+        listFavourites.add(item);
+      }
+
     debugPrint("$listFavourites");
   }
 

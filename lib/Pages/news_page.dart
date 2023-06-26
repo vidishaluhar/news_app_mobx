@@ -11,7 +11,7 @@ class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
-    dataModelStore.getData();
+    //dataModelStore.getData();
     final futureList = dataModelStore.listOfDataFromFuture;
     return Scaffold(
       appBar: AppBar(

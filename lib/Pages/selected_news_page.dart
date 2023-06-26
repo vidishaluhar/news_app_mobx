@@ -67,7 +67,7 @@ class SelectedNewsPage extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      "${dataModelStore.selectedItem!.time}".substring(0,16),
+                      "${dataModelStore.selectedItem!.time}".substring(0, 16),
                       style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w500,
@@ -113,22 +113,33 @@ class SelectedNewsPage extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton:
-      Observer(
+      floatingActionButton: Observer(
         builder: (_) {
+          return FloatingActionButton(
+            onPressed: () {
+              dataModelStore.setFavourite();
 
-          return  FloatingActionButton(onPressed: () {
-
-
-            dataModelStore.setFavourite();
-            dataModelStore.addfavourites(dataModelStore.selectedItem!);
-
-          },
+              if (dataModelStore.listFavourites
+                  .contains(dataModelStore.selectedItem)) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text("Item is already added to favourites",style: TextStyle(fontSize: 20)),
+                  elevation: 25,
+                  duration: const Duration(seconds: 3),
+                  backgroundColor: Colors.teal.shade400,
+                  padding: const EdgeInsets.all(15),
+                ));
+              }
+              else
+                {
+                  dataModelStore.addfavourites(dataModelStore.selectedItem!);
+                }
+            },
             foregroundColor: Colors.white,
             elevation: 25,
             backgroundColor: Colors.teal.shade400,
-            child: dataModelStore.isFavourite ? const Icon(Icons.favorite_outlined) : const Icon(Icons.favorite_border_outlined),
-
+            child: dataModelStore.listFavourites.contains(dataModelStore.selectedItem)
+                ? const Icon(Icons.favorite_outlined)
+                : const Icon(Icons.favorite_border_outlined),
           );
         },
       ),

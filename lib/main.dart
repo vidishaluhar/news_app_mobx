@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_app_mobx/Pages/favourites_page.dart';
@@ -15,19 +16,22 @@ void main() {
       systemNavigationBarColor: Colors.teal,
       systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarDividerColor: Colors.white));
-  runApp(const MyApp());
+
+
+
+  runApp( const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DataModelStore dataModelStore=DataModelStore();
+    dataModelStore.getData();
     return MultiProvider(
       providers: [
-        Provider<DataModelStore>(
-          create: (context) => DataModelStore(),
-        ),
+        Provider.value(value: dataModelStore),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -53,7 +57,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int cIndex = 0;
 
-  List<Widget> pages = [const NewsPage(), const FavouritesPage(), const SettingsPage()];
+  List<Widget> pages = [const NewsPage(),  FavouritesPage(), const SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
