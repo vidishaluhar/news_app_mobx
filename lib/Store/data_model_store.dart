@@ -10,11 +10,20 @@ abstract class _DataModelStore with Store
   @observable
   ObservableFuture<List<DataModel>>? listOfDataFromFuture;
 
+  @observable
+  DataModel? selectedItem;
+
   @action
   Future fetchData() => listOfDataFromFuture=ObservableFuture(dataModelApi.getDataFromApi().then((data) => data));
 
   void getData()
   {
     fetchData();
+  }
+
+  @action
+  void onItemSelected(DataModel item)
+  {
+    selectedItem=item;
   }
 }

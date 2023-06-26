@@ -63,13 +63,23 @@ class NewsPage extends StatelessWidget {
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final data = listOfData[index];
+                    debugPrint("$data");
                     return ListTile(
-                      leading: FractionallySizedBox(
-                        heightFactor: ,
-                        child: Image.network(
-                          data.images,width: 125,height: 100,
-                          fit: BoxFit.fill,
-                        ),
+                      leading: LayoutBuilder(
+                        builder: (BuildContext context, BoxConstraints constraints) {
+                          final double availableHeight=constraints.maxHeight;
+                          debugPrint("$availableHeight");
+                          final imageHeight=availableHeight*0.75;
+                          debugPrint("${imageHeight}");
+                          debugPrint("${imageHeight/25}");
+                          return FractionallySizedBox(
+                            heightFactor: imageHeight/25,
+                            child: Image.network(
+                              data.images,width: 125,height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +97,11 @@ class NewsPage extends StatelessWidget {
                                 padding: MaterialStatePropertyAll(
                                     EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 0))),
-                            onPressed: () {},
+                            onPressed: () {
+                                dataModelStore.onItemSelected(listOfData[index]);
+                                debugPrint(dataModelStore.selectedItem!.images);
+                                Navigator.pushNamed(context, '/SelectedNews',arguments: dataModelStore.selectedItem);
+                            },
                             child: const Text("read more",
                                 style: TextStyle(
                                     color: Colors.teal,

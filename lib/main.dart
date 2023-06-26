@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:news_app_mobx/Pages/favourites_page.dart';
 import 'package:news_app_mobx/Pages/news_page.dart';
+import 'package:news_app_mobx/Pages/selected_news_page.dart';
+import 'package:news_app_mobx/Pages/settings_page.dart';
+import 'package:news_app_mobx/Store/data_model_store.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -18,14 +23,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        Provider<DataModelStore>(create: (context) => DataModelStore(),)
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: MyHomePage(),
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/SelectedNews' : (context) => SelectedNewsPage()
+        },
       ),
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -43,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> pages=[
     NewsPage(),
+    FavouritesPage(),
+    SettingsPage()
   ];
 
   @override

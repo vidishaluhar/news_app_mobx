@@ -26,6 +26,22 @@ mixin _$DataModelStore on _DataModelStore, Store {
     });
   }
 
+  late final _$selectedItemAtom =
+      Atom(name: '_DataModelStore.selectedItem', context: context);
+
+  @override
+  DataModel? get selectedItem {
+    _$selectedItemAtom.reportRead();
+    return super.selectedItem;
+  }
+
+  @override
+  set selectedItem(DataModel? value) {
+    _$selectedItemAtom.reportWrite(value, super.selectedItem, () {
+      super.selectedItem = value;
+    });
+  }
+
   late final _$_DataModelStoreActionController =
       ActionController(name: '_DataModelStore', context: context);
 
@@ -41,9 +57,21 @@ mixin _$DataModelStore on _DataModelStore, Store {
   }
 
   @override
+  void onItemSelected(DataModel item) {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.onItemSelected');
+    try {
+      return super.onItemSelected(item);
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-listOfDataFromFuture: ${listOfDataFromFuture}
+listOfDataFromFuture: ${listOfDataFromFuture},
+selectedItem: ${selectedItem}
     ''';
   }
 }
