@@ -1,16 +1,10 @@
-# news_app_mobx
+# News App Using MobX
 
-A new Flutter project.
+### Work done : 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Fetched News data from API
+* Home page shows the list of news with title, image and read_more button
+* On click of read more button, user will redirected to selected_news_page which shows some more details of that particular news
+* On selected_news_page user can add that news into the favourites list on click of FAB (Floating Action Button)
+* Eliminated duplicate entries of news in the favourites list
+* user can remove News from favourites list on click of favourites_icon
