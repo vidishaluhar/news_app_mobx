@@ -57,7 +57,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int cIndex = 0;
 
-  List<Widget> pages = [const NewsPage(),  FavouritesPage(), const SettingsPage()];
+  List<Widget> pages = [const NewsPage(),  FavouritesPage(),  SettingsPage()];
 
   @override
   Widget build(BuildContext context) {

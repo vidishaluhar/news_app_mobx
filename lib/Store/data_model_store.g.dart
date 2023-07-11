@@ -58,6 +58,22 @@ mixin _$DataModelStore on _DataModelStore, Store {
     });
   }
 
+  late final _$isSongsSwitchAtom =
+      Atom(name: '_DataModelStore.isSongsSwitch', context: context);
+
+  @override
+  bool get isSongsSwitch {
+    _$isSongsSwitchAtom.reportRead();
+    return super.isSongsSwitch;
+  }
+
+  @override
+  set isSongsSwitch(bool value) {
+    _$isSongsSwitchAtom.reportWrite(value, super.isSongsSwitch, () {
+      super.isSongsSwitch = value;
+    });
+  }
+
   late final _$listFavouritesAtom =
       Atom(name: '_DataModelStore.listFavourites', context: context);
 
@@ -100,6 +116,17 @@ mixin _$DataModelStore on _DataModelStore, Store {
   }
 
   @override
+  void setSongsSwitch(bool value) {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.setSongsSwitch');
+    try {
+      return super.setSongsSwitch(value);
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Future<dynamic> fetchData() {
     final _$actionInfo = _$_DataModelStoreActionController.startAction(
         name: '_DataModelStore.fetchData');
@@ -127,6 +154,7 @@ mixin _$DataModelStore on _DataModelStore, Store {
 listOfDataFromFuture: ${listOfDataFromFuture},
 selectedItem: ${selectedItem},
 isFavourite: ${isFavourite},
+isSongsSwitch: ${isSongsSwitch},
 listFavourites: ${listFavourites}
     ''';
   }
