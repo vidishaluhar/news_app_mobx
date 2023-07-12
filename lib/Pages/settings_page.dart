@@ -31,11 +31,11 @@ class SettingsPage extends StatelessWidget {
               trailing: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Observer(
-                  builder: (BuildContext context) {
+                  builder: (_) {
                     return CupertinoSwitch(
                       activeColor: Colors.teal,
                       value: dataModelStore.isSongsSwitch,
-                      onChanged: (bool value) {
+                      onChanged: (value) {
                         dataModelStore.setSongsSwitch(value);
                       },
                     );

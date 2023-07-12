@@ -1,4 +1,6 @@
 
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_app_mobx/Pages/favourites_page.dart';
@@ -18,8 +20,7 @@ void main() {
       systemNavigationBarDividerColor: Colors.white));
 
 
-
-  runApp( const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     DataModelStore dataModelStore=DataModelStore();
     dataModelStore.getData();
+    // print(dataModelStore.getData());
     return MultiProvider(
       providers: [
         Provider.value(value: dataModelStore),

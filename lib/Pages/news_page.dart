@@ -11,7 +11,7 @@ class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
-    //dataModelStore.getData();
+    // dataModelStore.getData();
     final futureList = dataModelStore.listOfDataFromFuture;
     return Scaffold(
       appBar: AppBar(
@@ -27,6 +27,8 @@ class NewsPage extends StatelessWidget {
                 child: CircularProgressIndicator(color: Colors.teal),
               );
             case FutureStatus.rejected:
+              print(futureList.error);
+              print(futureList.result);
               return Center(
                 child: Column(
                   children: [
@@ -51,17 +53,17 @@ class NewsPage extends StatelessWidget {
                 ),
               );
             case FutureStatus.fulfilled:
-              final List<DataModel> listOfData = futureList.result;
+              final NewsModel news = futureList.result;
               return RefreshIndicator(
                 onRefresh: () {
                   return dataModelStore.fetchData();
                 },
                 child: ListView.builder(
-                  itemCount: listOfData.length,
+                  itemCount: news.data?.length,
                   shrinkWrap: true,
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    final data = listOfData[index];
+                    final data = news.data?[index];
                     debugPrint("$data");
                     return ListTile(
                       leading: LayoutBuilder(
@@ -75,7 +77,7 @@ class NewsPage extends StatelessWidget {
                           return FractionallySizedBox(
                             heightFactor: imageHeight / 25,
                             child: Image.network(
-                              data.images,
+                              data!.images ?? "",
                               width: 125,
                               height: 100,
                               fit: BoxFit.cover,
@@ -88,7 +90,7 @@ class NewsPage extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: Text("Written by ${data.author}",
+                            child: Text("Written by ${data?.author}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
@@ -100,7 +102,7 @@ class NewsPage extends StatelessWidget {
                                     EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 0))),
                             onPressed: () {
-                              dataModelStore.onItemSelected(listOfData[index]);
+                              dataModelStore.onItemSelected(news.data![index]);
                               // debugPrint(dataModelStore.selectedItem?.images);
                               Navigator.pushNamed(context, '/SelectedNews');
                             },
@@ -111,7 +113,7 @@ class NewsPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      title: Text(data.title,
+                      title: Text(data!.title ?? "",
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,

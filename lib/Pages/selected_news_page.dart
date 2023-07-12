@@ -54,7 +54,7 @@ class SelectedNewsPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    dataModelStore.selectedItem!.title,
+                    dataModelStore.selectedItem!.title ?? "",
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
