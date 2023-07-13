@@ -13,20 +13,19 @@ class SelectedNewsPage extends StatelessWidget {
     // print("${dataModelStore}----------");
     //   final selectediItem=ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         toolbarHeight: 50,
         automaticallyImplyLeading: true,
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.teal,
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: Colors.teal),
+        systemOverlayStyle: SystemUiOverlayStyle.dark
       ),
       body: Observer(
         builder: (context) {
           // print("selected page  --> ${dataModelStore.selectedItem?.images}");
           return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 // Image.network("https://static.inshorts.com/inshorts/images/v1/variants/jpg/m/2023/06_jun/26_mon/img_1687750729843_888.jpg")
@@ -43,9 +42,12 @@ class SelectedNewsPage extends StatelessWidget {
                       debugPrint("${imageHeight / 100}");
                       return FractionallySizedBox(
                         heightFactor: imageHeight / 100,
-                        child: Image.network(
-                          "${dataModelStore.selectedItem?.images}",
-                          fit: BoxFit.cover,
+                        child: Hero(
+                          tag: '${dataModelStore.selectedItem?.images}',
+                          child: Image.network(
+                            "${dataModelStore.selectedItem?.images}",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
                     },
@@ -56,7 +58,7 @@ class SelectedNewsPage extends StatelessWidget {
                   child: Text(
                     dataModelStore.selectedItem!.title ?? "",
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
                     ),
@@ -69,7 +71,7 @@ class SelectedNewsPage extends StatelessWidget {
                     child: Text(
                       "${dataModelStore.selectedItem!.time}".substring(0, 16),
                       style: const TextStyle(
-                        color: Colors.grey,
+                        color: Colors.white70,
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                       ),
@@ -83,7 +85,7 @@ class SelectedNewsPage extends StatelessWidget {
                     child: Text(
                       "Written by ${dataModelStore.selectedItem!.author}",
                       style: const TextStyle(
-                        color: Colors.grey,
+                        color: Colors.white70,
                         fontWeight: FontWeight.w500,
                         fontSize: 17.5,
                       ),
@@ -101,7 +103,7 @@ class SelectedNewsPage extends StatelessWidget {
                     child: Text(
                       " ${dataModelStore.selectedItem!.decription}",
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.w300,
                         fontSize: 20,
                       ),
@@ -125,7 +127,7 @@ class SelectedNewsPage extends StatelessWidget {
                   content: const Text("Item is already added to favourites",style: TextStyle(fontSize: 20)),
                   elevation: 25,
                   duration: const Duration(seconds: 3),
-                  backgroundColor: Colors.teal.shade400,
+                  backgroundColor: Colors.black,
                   padding: const EdgeInsets.all(15),
                 ));
               }
@@ -136,7 +138,8 @@ class SelectedNewsPage extends StatelessWidget {
             },
             foregroundColor: Colors.white,
             elevation: 25,
-            backgroundColor: Colors.teal.shade400,
+
+            backgroundColor: Colors.black,
             child: dataModelStore.listFavourites.contains(dataModelStore.selectedItem)
                 ? const Icon(Icons.favorite_outlined)
                 : const Icon(Icons.favorite_border_outlined),

@@ -13,19 +13,18 @@ class FavouritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
     return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.90),
       appBar: AppBar(
+        title: Text("Favourites"),
         toolbarHeight: 50,
         automaticallyImplyLeading: true,
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.teal,
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: Colors.teal),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: dataModelStore.listFavourites.isEmpty ?
       const Center(child: Text("Oops !! Your Favourite List is Empty 😢",
-        style: TextStyle(fontSize: 20),))
+        style: TextStyle(fontSize: 20,color: Colors.white),))
           : Observer(
         builder: (_) {
           return ListView.builder(
@@ -64,7 +63,7 @@ class FavouritesPage extends StatelessWidget {
                   ),
                   title: Text(dataModelStore.listFavourites[index].title ?? "",
                       style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.w500)),
                   trailing: /*isListNull ? Center(child: Text("Oops !! Your Favourite List is Empty 😢",
@@ -93,3 +92,4 @@ class FavouritesPage extends StatelessWidget {
     );
   }
 }
+

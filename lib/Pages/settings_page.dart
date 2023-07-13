@@ -16,12 +16,9 @@ class SettingsPage extends StatelessWidget {
           title: Text("Settings"),
           toolbarHeight: 50,
           automaticallyImplyLeading: true,
-          backgroundColor: Colors.teal,
-          foregroundColor: Colors.white,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-              systemNavigationBarColor: Colors.teal,
-              statusBarIconBrightness: Brightness.light,
-              statusBarColor: Colors.teal),
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white ,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         body: Column(
           children: [

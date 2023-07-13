@@ -13,11 +13,10 @@ import 'package:provider/provider.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.dark,
-      statusBarColor: Colors.teal,
+      statusBarColor: Colors.black,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.teal,
-      systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarDividerColor: Colors.white));
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.light,));
 
 
   runApp( MyApp());
@@ -38,6 +37,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.dark
+          ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
@@ -59,7 +61,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int cIndex = 0;
 
-  List<Widget> pages = [const NewsPage(),  FavouritesPage(),  SettingsPage()];
+  List<Widget> pages = [ NewsPage(),  FavouritesPage(),  SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -67,16 +69,20 @@ class _MyHomePageState extends State<MyHomePage> {
       body: pages[cIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 25,
+        backgroundColor: Colors.black,
+        unselectedFontSize: 15,
+        unselectedIconTheme: IconThemeData(color: Colors.white70,size: 20),
+        unselectedItemColor: Colors.white70,
         landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         selectedFontSize: 18,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         selectedIconTheme:
-            const IconThemeData(color: Colors.teal, size: 25, shadows: [
+            const IconThemeData(color: Colors.white, size: 25, /*shadows: [
           Shadow(
-              color: Colors.tealAccent, offset: Offset(1, 0), blurRadius: 75),
-          Shadow(color: Colors.white, offset: Offset(1, 0), blurRadius: 75)
-        ]),
+              color: Colors.black, offset: Offset(1, 0), blurRadius: 75),
+          Shadow(color: Colors.black, offset: Offset(1, 0), blurRadius: 75)
+        ]*/),
         onTap: (value) {
           setState(() {
             cIndex = value;

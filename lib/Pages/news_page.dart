@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app_mobx/Model/data_model.dart';
@@ -6,124 +7,178 @@ import 'package:news_app_mobx/Store/data_model_store.dart';
 import 'package:provider/provider.dart';
 
 class NewsPage extends StatelessWidget {
-  const NewsPage({super.key});
+   NewsPage({super.key});
+
+  DateTime currenttime=DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
     // dataModelStore.getData();
     final futureList = dataModelStore.listOfDataFromFuture;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: const Text("Latest News"),
-        foregroundColor: Colors.white,
-      ),
-      body: Observer(
-        builder: (_) {
-          switch (futureList!.status) {
-            case FutureStatus.pending:
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.teal),
-              );
-            case FutureStatus.rejected:
-              print(futureList.error);
-              print(futureList.result);
-              return Center(
-                child: Column(
-                  children: [
-                    const Text(
-                      "Failed to load items ",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    FilledButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Tap to Retry",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ))
-                  ],
-                ),
-              );
-            case FutureStatus.fulfilled:
-              final NewsModel news = futureList.result;
-              return RefreshIndicator(
-                onRefresh: () {
-                  return dataModelStore.fetchData();
-                },
-                child: ListView.builder(
-                  itemCount: news.data?.length,
-                  shrinkWrap: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final data = news.data?[index];
-                    debugPrint("$data");
-                    return ListTile(
-                      leading: LayoutBuilder(
-                        builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          final double availableHeight = constraints.maxHeight;
-                          debugPrint("$availableHeight");
-                          final imageHeight = availableHeight * 0.75;
-                          debugPrint("$imageHeight");
-                          debugPrint("${imageHeight / 25}");
-                          return FractionallySizedBox(
-                            heightFactor: imageHeight / 25,
-                            child: Image.network(
-                              data!.images ?? "",
-                              width: 125,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
-                      ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text("Written by ${data?.author}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    color: Colors.grey)),
-                          ),
-                          TextButton(
-                            style: const ButtonStyle(
-                                padding: MaterialStatePropertyAll(
-                                    EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 0))),
-                            onPressed: () {
-                              dataModelStore.onItemSelected(news.data![index]);
-                              // debugPrint(dataModelStore.selectedItem?.images);
-                              Navigator.pushNamed(context, '/SelectedNews');
-                            },
-                            child: const Text("read more",
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.90),
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+              // primary: false,
+              pinned: true,
+              backgroundColor: Colors.black.withOpacity(0.90),
+              expandedHeight: 275,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Image.asset(
+                    'assets/images/bbc_news_breaking.jpeg',
+                    fit: BoxFit.fill),
+              ),
+              title: const Text("Latest News",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 22,
+                  )),
+            ),
+
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                Observer(
+                  builder: (_) {
+                    switch (futureList!.status) {
+                      case FutureStatus.pending:
+                        return Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        );
+                      case FutureStatus.rejected:
+                        print(futureList.error);
+                        print(futureList.result);
+                        return Center(
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Failed to load items ",
                                 style: TextStyle(
-                                    color: Colors.teal,
-                                    fontWeight: FontWeight.w400)),
+                                  fontSize: 25,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              FilledButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Tap to Retry",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ))
+                            ],
                           ),
-                        ],
-                      ),
-                      title: Text(data!.title ?? "",
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500)),
-                    );
+                        );
+                      case FutureStatus.fulfilled:
+                        final NewsModel news = futureList.result;
+                        return RefreshIndicator(
+                          onRefresh: () {
+                            return dataModelStore.fetchData();
+                          },
+                          child: ListView.builder(
+                            itemCount: news.data?.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+
+                              final data = news.data?[index];
+                              debugPrint("$data");
+
+                              ///time like : Just Now, 5 min ago, 1 hour ago
+                              final fetchedTime=DateTime.parse("${data!.time}");
+                              Duration timeDifference=currenttime.difference(fetchedTime);
+                              debugPrint("$timeDifference");
+                              String formatFetchedTime(Duration duration)
+                              {
+                                if(duration.inMinutes<1)
+                                  {
+                                    return "Just Now";
+                                  }
+                                else if(duration.inHours<1)
+                                  {
+                                    return "${duration.inMinutes} min ago";
+                                  }
+                                else if(duration.inHours==1)
+                                  {
+                                    return "1 hour ago";
+                                  }
+
+                                else if(duration.inHours<24)
+                                {
+                                  return "${duration.inHours} hour ago";
+                                }
+                                else
+                                  {
+                                    return "Long time ago";
+                                  }
+                              }
+                              String correctTime=formatFetchedTime(timeDifference);
+                              debugPrint(correctTime);
+
+
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: InkWell(
+                                  onTap: (){
+                                    dataModelStore.onItemSelected(news.data![index]);
+                                    // debugPrint(dataModelStore.selectedItem?.images);
+                                    Navigator.pushNamed(context, '/SelectedNews');
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 8),
+                                      ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                          child: Hero(tag: '${data.images}',
+                                          child: Image.network(data.images ?? "",))),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8,bottom: 3),
+                                        child: Text(data.title ?? "",
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500)),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Written by ${data.author}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15,
+                                                  color: Colors.white70)),
+
+                                          Text("${correctTime}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15,
+                                                  color: Colors.white70)),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
+                              );
+
+                            },
+                          ),
+                        );
+                    }
                   },
-                ),
-              );
-          }
-        },
+                )
+              ]
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
