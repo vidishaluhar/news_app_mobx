@@ -25,9 +25,10 @@
 // }
 
 import 'package:json_annotation/json_annotation.dart';
-part 'data_model.g.dart';
+part 'news_model.g.dart';
 @JsonSerializable()
-class NewsModel {
+
+class NewsModel{
   String? category;
   int? countArticles;
   List<Data>? data;

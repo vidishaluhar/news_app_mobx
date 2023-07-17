@@ -58,6 +58,54 @@ mixin _$DataModelStore on _DataModelStore, Store {
     });
   }
 
+  late final _$selectedChipAtom =
+      Atom(name: '_DataModelStore.selectedChip', context: context);
+
+  @override
+  String get selectedChip {
+    _$selectedChipAtom.reportRead();
+    return super.selectedChip;
+  }
+
+  @override
+  set selectedChip(String value) {
+    _$selectedChipAtom.reportWrite(value, super.selectedChip, () {
+      super.selectedChip = value;
+    });
+  }
+
+  late final _$choiceChipListAtom =
+      Atom(name: '_DataModelStore.choiceChipList', context: context);
+
+  @override
+  ObservableList<dynamic> get choiceChipList {
+    _$choiceChipListAtom.reportRead();
+    return super.choiceChipList;
+  }
+
+  @override
+  set choiceChipList(ObservableList<dynamic> value) {
+    _$choiceChipListAtom.reportWrite(value, super.choiceChipList, () {
+      super.choiceChipList = value;
+    });
+  }
+
+  late final _$isSongsSwitchAtom =
+      Atom(name: '_DataModelStore.isSongsSwitch', context: context);
+
+  @override
+  bool get isSongsSwitch {
+    _$isSongsSwitchAtom.reportRead();
+    return super.isSongsSwitch;
+  }
+
+  @override
+  set isSongsSwitch(bool value) {
+    _$isSongsSwitchAtom.reportWrite(value, super.isSongsSwitch, () {
+      super.isSongsSwitch = value;
+    });
+  }
+
   late final _$listFavouritesAtom =
       Atom(name: '_DataModelStore.listFavourites', context: context);
 
@@ -78,6 +126,17 @@ mixin _$DataModelStore on _DataModelStore, Store {
       ActionController(name: '_DataModelStore', context: context);
 
   @override
+  void updateChoiceChip(String chipName) {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.updateChoiceChip');
+    try {
+      return super.updateChoiceChip(chipName);
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addfavourites(Data item) {
     final _$actionInfo = _$_DataModelStoreActionController.startAction(
         name: '_DataModelStore.addfavourites');
@@ -94,6 +153,17 @@ mixin _$DataModelStore on _DataModelStore, Store {
         name: '_DataModelStore.setFavourite');
     try {
       return super.setFavourite();
+    } finally {
+      _$_DataModelStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSongsSwitch(bool value) {
+    final _$actionInfo = _$_DataModelStoreActionController.startAction(
+        name: '_DataModelStore.setSongsSwitch');
+    try {
+      return super.setSongsSwitch(value);
     } finally {
       _$_DataModelStoreActionController.endAction(_$actionInfo);
     }
@@ -127,6 +197,9 @@ mixin _$DataModelStore on _DataModelStore, Store {
 listOfDataFromFuture: ${listOfDataFromFuture},
 selectedItem: ${selectedItem},
 isFavourite: ${isFavourite},
+selectedChip: ${selectedChip},
+choiceChipList: ${choiceChipList},
+isSongsSwitch: ${isSongsSwitch},
 listFavourites: ${listFavourites}
     ''';
   }
