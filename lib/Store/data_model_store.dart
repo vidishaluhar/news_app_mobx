@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:dio/src/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app_mobx/Fetch%20Data/fetch_data_from_api.dart';
@@ -11,7 +10,7 @@ class DataModelStore = _DataModelStore with _$DataModelStore;
 
 abstract class _DataModelStore with Store {
   final dataModelApi =
-      DataModelApi(Dio(BaseOptions(contentType: 'application/json')));
+      DataModelApi(Dio(BaseOptions(contentType: 'application/json',)));
 
   @observable
   ObservableFuture<NewsModel>? listOfDataFromFuture;
@@ -23,21 +22,21 @@ abstract class _DataModelStore with Store {
   bool isFavourite = false;
 
   @observable
-  String selectedChip = 'All';
+  String selectedChip = 'all';
 
   @observable
   ObservableList choiceChipList = ObservableList.of([
-    'All',
-    'Automobile',
-    'Business',
-    'Entertainment',
-    'National',
-    'Politics',
-    'Science',
-    'Sports',
-    'Startup',
-    'Technology',
-    'World',
+    'all',
+    'automobile',
+    'business',
+    'entertainment',
+    'national',
+    'politics',
+    'science',
+    'sports',
+    'startup',
+    'technology',
+    'world',
   ]);
 
   @action
@@ -54,13 +53,12 @@ abstract class _DataModelStore with Store {
   String? itemMsg;
 
   @action
-  void addfavourites(Data item) {
+  void addFavourites(Data item) {
     if (listFavourites.contains(item)) {
       itemMsg = "Item already in the List";
     } else {
       listFavourites.add(item);
     }
-
     debugPrint("$listFavourites");
   }
 
@@ -76,7 +74,7 @@ abstract class _DataModelStore with Store {
 
   @action
   Future fetchData() => listOfDataFromFuture =
-      ObservableFuture(dataModelApi.getDataFromApi().then((data) => data));
+      ObservableFuture(dataModelApi.getDataFromApi(selectedChip));
 
   void getData() {
     fetchData();

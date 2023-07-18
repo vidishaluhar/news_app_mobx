@@ -6,14 +6,14 @@ import 'package:news_app_mobx/Store/data_model_store.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
-  SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
     return Scaffold(
         appBar: AppBar(
-          title: Text("Settings"),
+          title: const Text("Settings"),
           toolbarHeight: 50,
           automaticallyImplyLeading: true,
           backgroundColor: Colors.black,
@@ -24,7 +24,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             ListTile(
               dense: true,
-              contentPadding: EdgeInsets.all(8),
+              contentPadding: const EdgeInsets.all(8),
               trailing: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Observer(
@@ -39,8 +39,8 @@ class SettingsPage extends StatelessWidget {
                   },
                 ),
               ),
-              title: Padding(
-                padding: const EdgeInsets.all(8.0),
+              title: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Have you got bored of reading news ? 🥱",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),

@@ -11,7 +11,7 @@ class SelectedNewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dataModelStore = context.read<DataModelStore>();
     // print("${dataModelStore}----------");
-    //   final selectediItem=ModalRoute.of(context)!.settings.arguments;
+    //   final selectedItem=ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -67,13 +67,23 @@ class SelectedNewsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "${dataModelStore.selectedItem!.time}".substring(0, 16),
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.watch_later_outlined,
+                          color: Colors.white70,
+                          size: 23,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          "${dataModelStore.selectedItem!.time}".substring(0, 16),
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -81,13 +91,24 @@ class SelectedNewsPage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "Written by ${dataModelStore.selectedItem!.author}",
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17.5,
-                      ),
+                    child: Row(
+                      children: [
+                        const Image(
+                          image: AssetImage(
+                              "assets/images/person.png"),
+                          height: 27,color: Colors.white70,
+                          width: 27,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          "by ${dataModelStore.selectedItem!.author}",
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17.5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -100,7 +121,7 @@ class SelectedNewsPage extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      " ${dataModelStore.selectedItem!.decription}",
+                      "     ${dataModelStore.selectedItem!.decription}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w300,
@@ -131,7 +152,7 @@ class SelectedNewsPage extends StatelessWidget {
                   padding: EdgeInsets.all(15),
                 ));
               } else {
-                dataModelStore.addfavourites(dataModelStore.selectedItem!);
+                dataModelStore.addFavourites(dataModelStore.selectedItem!);
               }
             },
             shape: const OutlineInputBorder(

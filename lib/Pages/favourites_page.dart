@@ -5,9 +5,9 @@ import 'package:news_app_mobx/Store/data_model_store.dart';
 import 'package:provider/provider.dart';
 
 class FavouritesPage extends StatelessWidget {
-  FavouritesPage({Key? key}) : super(key: key);
+  const FavouritesPage({Key? key}) : super(key: key);
 
-  bool isListNull = true;
+  final bool isListNull = true;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class FavouritesPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.90),
       appBar: AppBar(
-        title: Text("Favourites"),
+        title: const Text("Favourites"),
         toolbarHeight: 50,
         automaticallyImplyLeading: true,
         backgroundColor: Colors.black,
@@ -24,13 +24,18 @@ class FavouritesPage extends StatelessWidget {
       ),
       body: Observer(
         builder: (_) {
+
+          ///if favourites list is empty
           if (dataModelStore.listFavourites.isEmpty) {
-            return Center(
+            return const Center(
                 child: Text(
               "Oops !! Your Favourite List is Empty 😢",
               style: TextStyle(fontSize: 20, color: Colors.white),
             ));
-          } else {
+          }
+
+          ///else favourites list has data
+          else {
             return ListView.builder(
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
@@ -43,12 +48,10 @@ class FavouritesPage extends StatelessWidget {
                       dataModelStore
                           .onItemSelected(dataModelStore.listFavourites[index]);
                       Navigator.pushNamed(context, '/SelectedNews');
-                      /*Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SelectedNewsPage(),
-                        ));*/
                     },
+
+
+                    ///Article image
                     leading: LayoutBuilder(
                       builder:
                           (BuildContext context, BoxConstraints constraints) {
@@ -65,14 +68,18 @@ class FavouritesPage extends StatelessWidget {
                         );
                       },
                     ),
+
+                    ///Article Title
                     title: Text(
                         dataModelStore.listFavourites[index].title ?? "",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.w500)),
-                    trailing: /*isListNull ? Center(child: Text("Oops !! Your Favourite List is Empty 😢",
-                    style: TextStyle(fontSize: 20),)) : */
+
+
+                    ///Article favourites icon
+                    trailing:
                         IconButton(
                             style: const ButtonStyle(
                                 iconSize: MaterialStatePropertyAll(30),
@@ -81,12 +88,6 @@ class FavouritesPage extends StatelessWidget {
                             onPressed: () {
                               dataModelStore.listFavourites.removeAt(index);
                               debugPrint("item is removed");
-                              /*if (dataModelStore.listFavourites.isEmpty) {
-                          isListNull = true;
-                        }
-                        else {
-                          isListNull = false;
-                        }*/
                             },
                             icon: const Icon(Icons.favorite_outlined)),
                   ),

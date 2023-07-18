@@ -21,7 +21,7 @@ class _DataModelApi implements DataModelApi {
   String? baseUrl;
 
   @override
-  Future<NewsModel> getDataFromApi() async {
+  Future<NewsModel> getDataFromApi(String categoryPath) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -34,7 +34,7 @@ class _DataModelApi implements DataModelApi {
     )
             .compose(
               _dio.options,
-              '/all',
+              '/${categoryPath}',
               queryParameters: queryParameters,
               data: _data,
             )

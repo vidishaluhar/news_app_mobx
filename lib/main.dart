@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_app_mobx/Pages/favourites_page.dart';
@@ -19,7 +18,7 @@ void main() {
       systemNavigationBarIconBrightness: Brightness.light,));
 
 
-  runApp( MyApp());
+  runApp(const  MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DataModelStore dataModelStore=DataModelStore();
-    dataModelStore.getData();
+    // dataModelStore.getData();
     // print(dataModelStore.getData());
     return MultiProvider(
       providers: [
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             systemOverlayStyle: SystemUiOverlayStyle.dark
           ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -61,17 +60,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int cIndex = 0;
 
-  List<Widget> pages = [ NewsPage(),  FavouritesPage(),  SettingsPage()];
+  List<Widget> pages = [ NewsPage(),  const FavouritesPage(),  const SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[cIndex],
+      // body: pages[cIndex],
+      body: IndexedStack(index: cIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 25,
         backgroundColor: Colors.black,
         unselectedFontSize: 15,
-        unselectedIconTheme: IconThemeData(color: Colors.white70,size: 20),
+        unselectedIconTheme: const IconThemeData(color: Colors.white70,size: 20),
         unselectedItemColor: Colors.white70,
         landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         selectedFontSize: 18,
