@@ -29,7 +29,7 @@ class FavouritesPage extends StatelessWidget {
           if (dataModelStore.listFavourites.isEmpty) {
             return const Center(
                 child: Text(
-              "Oops !! Your Favourite List is Empty 😢",
+              "Your Favourite List is Empty",
               style: TextStyle(fontSize: 20, color: Colors.white),
             ));
           }

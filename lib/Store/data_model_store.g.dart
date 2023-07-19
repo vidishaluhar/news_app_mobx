@@ -139,7 +139,7 @@ mixin _$DataModelStore on _DataModelStore, Store {
   @override
   void addFavourites(Data item) {
     final _$actionInfo = _$_DataModelStoreActionController.startAction(
-        name: '_DataModelStore.addfavourites');
+        name: '_DataModelStore.addFavourites');
     try {
       return super.addFavourites(item);
     } finally {
