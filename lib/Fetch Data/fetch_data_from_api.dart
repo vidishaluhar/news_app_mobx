@@ -14,8 +14,8 @@ part 'fetch_data_from_api.g.dart';
 @RestApi(baseUrl: "https://inshorts-news.vercel.app")
 abstract class DataModelApi {
   factory DataModelApi(Dio dio, {String? baseUrl}) {
-    /*Connectivity connectivity = Connectivity();
-    StreamSubscription connectivitySubscription;
+    Connectivity connectivity = Connectivity();
+    /*StreamSubscription connectivitySubscription;
     Completer completer=Completer();*/
 
     dio.options = BaseOptions(
@@ -23,7 +23,8 @@ abstract class DataModelApi {
         receiveTimeout: const Duration(seconds: 5),
         contentType: 'application/json');
 
-    dio.interceptors..add(LogInterceptor())..add(RetryInterceptor());
+    /*dio.interceptors *//*..add(LogInterceptor())*//*
+      ..add(ConnectivityRequestRetry(dio: dio, connectivity: connectivity));*/
 
     /*dynamic requestInterceptor(RequestOptions options) {
       connectivitySubscription = connectivity.onConnectivityChanged.listen(
@@ -58,5 +59,4 @@ abstract class DataModelApi {
 
   @GET('/{category_path}')
   Future<NewsModel> getDataFromApi(@Path('category_path') String categoryPath);
-
 }

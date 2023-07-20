@@ -43,6 +43,7 @@ dependencies:
   retrofit: any
   dio: ^5.2.1+1
   connectivity_plus: any
+  flutter_bloc: ^8.1.3
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +16,10 @@ abstract class _DataModelStore with Store {
   @observable
   ObservableFuture<NewsModel>? listOfDataFromFuture;
 
+
+  @observable
+  ObservableFuture<NewsModel>? paginationData;
+
   @observable
   Data? selectedItem;
 
@@ -23,6 +28,9 @@ abstract class _DataModelStore with Store {
 
   @observable
   String selectedChip = 'all';
+
+  @observable
+  ObservableStream<ConnectivityResult> connectivityStream=ObservableStream(Connectivity().onConnectivityChanged);
 
   @observable
   ObservableList choiceChipList = ObservableList.of([

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:news_app_mobx/Pages/selected_news_page.dart';
 import 'package:news_app_mobx/Store/data_model_store.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,15 @@ class FavouritesPage extends StatelessWidget {
         automaticallyImplyLeading: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.black,
+          statusBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),
       ),
       body: Observer(
         builder: (_) {
-
           ///if favourites list is empty
           if (dataModelStore.listFavourites.isEmpty) {
             return const Center(
@@ -47,9 +52,33 @@ class FavouritesPage extends StatelessWidget {
                     onTap: () {
                       dataModelStore
                           .onItemSelected(dataModelStore.listFavourites[index]);
-                      Navigator.pushNamed(context, '/SelectedNews');
-                    },
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
 
+                              transitionDuration: Duration(milliseconds: 250),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return ScaleTransition(
+                                  alignment: Alignment.center,
+                                  scale:
+                                      Tween<double>(begin: 0.1, end: 1).animate(
+                                    CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.decelerate,
+                                    ),
+                                  ),
+                                  child: child,
+                                );
+                              },
+                              pageBuilder: (BuildContext context,
+                                  Animation<double> animation,
+                                  Animation<double> secondaryAnimation) {
+                                return SelectedNewsPage();
+                              }));
+
+                      // Navigator.pushNamed(context, '/SelectedNews');
+                    },
 
                     ///Article image
                     leading: LayoutBuilder(
@@ -77,19 +106,16 @@ class FavouritesPage extends StatelessWidget {
                             fontSize: 15,
                             fontWeight: FontWeight.w500)),
 
-
                     ///Article favourites icon
-                    trailing:
-                        IconButton(
-                            style: const ButtonStyle(
-                                iconSize: MaterialStatePropertyAll(30),
-                                iconColor:
-                                    MaterialStatePropertyAll(Colors.red)),
-                            onPressed: () {
-                              dataModelStore.listFavourites.removeAt(index);
-                              debugPrint("item is removed");
-                            },
-                            icon: const Icon(Icons.favorite_outlined)),
+                    trailing: IconButton(
+                        style: const ButtonStyle(
+                            iconSize: MaterialStatePropertyAll(30),
+                            iconColor: MaterialStatePropertyAll(Colors.red)),
+                        onPressed: () {
+                          dataModelStore.listFavourites.removeAt(index);
+                          debugPrint("item is removed");
+                        },
+                        icon: const Icon(Icons.favorite_outlined)),
                   ),
                 );
               },

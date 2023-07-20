@@ -19,7 +19,12 @@ class SelectedNewsPage extends StatelessWidget {
           automaticallyImplyLeading: true,
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          systemOverlayStyle: SystemUiOverlayStyle.dark),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.black,
+          statusBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+        ),),
       body: Observer(
         builder: (context) {
           // print("selected page  --> ${dataModelStore.selectedItem?.images}");

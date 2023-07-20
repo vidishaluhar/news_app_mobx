@@ -26,6 +26,22 @@ mixin _$DataModelStore on _DataModelStore, Store {
     });
   }
 
+  late final _$paginationDataAtom =
+      Atom(name: '_DataModelStore.paginationData', context: context);
+
+  @override
+  ObservableFuture<NewsModel>? get paginationData {
+    _$paginationDataAtom.reportRead();
+    return super.paginationData;
+  }
+
+  @override
+  set paginationData(ObservableFuture<NewsModel>? value) {
+    _$paginationDataAtom.reportWrite(value, super.paginationData, () {
+      super.paginationData = value;
+    });
+  }
+
   late final _$selectedItemAtom =
       Atom(name: '_DataModelStore.selectedItem', context: context);
 
@@ -71,6 +87,22 @@ mixin _$DataModelStore on _DataModelStore, Store {
   set selectedChip(String value) {
     _$selectedChipAtom.reportWrite(value, super.selectedChip, () {
       super.selectedChip = value;
+    });
+  }
+
+  late final _$connectivityStreamAtom =
+      Atom(name: '_DataModelStore.connectivityStream', context: context);
+
+  @override
+  ObservableStream<ConnectivityResult> get connectivityStream {
+    _$connectivityStreamAtom.reportRead();
+    return super.connectivityStream;
+  }
+
+  @override
+  set connectivityStream(ObservableStream<ConnectivityResult> value) {
+    _$connectivityStreamAtom.reportWrite(value, super.connectivityStream, () {
+      super.connectivityStream = value;
     });
   }
 
@@ -195,9 +227,11 @@ mixin _$DataModelStore on _DataModelStore, Store {
   String toString() {
     return '''
 listOfDataFromFuture: ${listOfDataFromFuture},
+paginationData: ${paginationData},
 selectedItem: ${selectedItem},
 isFavourite: ${isFavourite},
 selectedChip: ${selectedChip},
+connectivityStream: ${connectivityStream},
 choiceChipList: ${choiceChipList},
 isSongsSwitch: ${isSongsSwitch},
 listFavourites: ${listFavourites}
