@@ -1,8 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 // class RetryInterceptor extends Interceptor {
 //
@@ -42,7 +37,11 @@ import 'package:flutter/material.dart';
 //     handler.next(err);
 //   }
 // }
-class ConnectivityRequestRetry extends Interceptor{
+
+
+
+
+/*class ConnectivityRequestRetry extends Interceptor{
   final Dio dio;
   final Connectivity connectivity;
 
@@ -91,7 +90,12 @@ class ConnectivityRequestRetry extends Interceptor{
 
     return responseCompleter.future;
   }
-}
+}*/
+
+
+
+
+
 /*
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';

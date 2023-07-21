@@ -21,7 +21,7 @@ class FavouritesPage extends StatelessWidget {
         automaticallyImplyLeading: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.black,
           statusBarColor: Colors.black,
           statusBarIconBrightness: Brightness.light,
@@ -56,7 +56,7 @@ class FavouritesPage extends StatelessWidget {
                           context,
                           PageRouteBuilder(
 
-                              transitionDuration: Duration(milliseconds: 250),
+                              transitionDuration: const Duration(milliseconds: 250),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
                                 return ScaleTransition(
@@ -74,7 +74,7 @@ class FavouritesPage extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return SelectedNewsPage();
+                                return const SelectedNewsPage();
                               }));
 
                       // Navigator.pushNamed(context, '/SelectedNews');

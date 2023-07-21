@@ -1,25 +1,20 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app_mobx/Model/news_model.dart';
 import 'package:news_app_mobx/Store/data_model_store.dart';
-import 'package:news_app_mobx/pagination/pagination_cubit.dart';
-import 'package:news_app_mobx/pagination/pagination_cubit.dart';
 import 'package:provider/provider.dart';
-
 
 class NewsPage extends StatelessWidget {
   NewsPage({super.key});
 
   final DateTime currentTime = DateTime.now();
-  String? correctTime;
-  Connectivity connectivity = Connectivity();
-  StreamSubscription? connectivityStream;
+
+  // Connectivity connectivity = Connectivity();
+  // StreamSubscription? connectivityStream;
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +25,7 @@ class NewsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black.withOpacity(0.90),
         body: CustomScrollView(
-          controller: context.watch<PaginationCubit>().scrollController,
+          controller: scrollController,
           slivers: [
             ///SliverAppBar
             SliverAppBar(
@@ -101,362 +96,169 @@ class NewsPage extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate.fixed(
                 [
-                  ReactionBuilder(
+                  Observer(
                     builder: (_) {
-                      return reaction(
-                          (_) => dataModelStore.connectivityStream.value,
-                          (result) {
-                        final messenger = ScaffoldMessenger.of(context);
-                        debugPrint(result.toString());
-                        /*messenger.showSnackBar(SnackBar(
-                            backgroundColor: Colors.white,
-                              content: Text(result == ConnectivityResult.none
-                                  ? 'Your are Offline '
-                                  : 'You are Online',style: TextStyle(color: Colors.black),)));*/
-                      }, delay: 3000);
-                    },
-                    child: BlocConsumer<PaginationCubit,PaginationStateCubit>(
-                      builder: (BuildContext context, state) {
-                          return Container();
-                      },
-                      listener: (context, state) {
-                        if(state is PaginationStateCubit.called)
-                          {
+                      final futureList = dataModelStore.listOfDataFromFuture;
+                      switch (futureList!.status) {
+                        ///if future data is pending
+                        case FutureStatus.pending:
+                          return const Center(
+                            child: LinearProgressIndicator(color: Colors.red),
+                          );
 
-                          }
-                      },
-                      child: Observer(
-                        builder: (_) {
-                          final futureList = dataModelStore.listOfDataFromFuture;
-                          switch (futureList!.status) {
-                            ///if future data is pending
-                            case FutureStatus.pending:
-                              return const Center(
-                                child: LinearProgressIndicator(color: Colors.red),
-                              );
-
-                            ///if future data is rejected
-                            case FutureStatus.rejected:
-                              debugPrint(futureList.error);
-                              debugPrint(futureList.result);
-                              return Center(
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      "Failed to load items ",
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    FilledButton(
-                                        onPressed: () {},
-                                        child: const Text(
-                                          "Tap to Retry",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ))
-                                  ],
+                        ///if future data is rejected
+                        case FutureStatus.rejected:
+                          debugPrint(futureList.error);
+                          debugPrint(futureList.result);
+                          return Center(
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "Failed to load items ",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              );
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                FilledButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Tap to Retry",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                              ],
+                            ),
+                          );
 
-                            ///if future gets the response
-                            case FutureStatus.fulfilled:
-                              final NewsModel news = futureList.result;
-                              return RefreshIndicator(
-                                onRefresh: () {
-                                  return dataModelStore.fetchData();
-                                },
-                                child: ListView.builder(
-                                  itemCount: news.data?.length,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    final data = news.data?[index];
-                                    debugPrint("$data");
+                        ///if future gets the response
+                        case FutureStatus.fulfilled:
+                          final NewsModel news = futureList.result;
+                          return RefreshIndicator(
+                            onRefresh: () {
+                              return dataModelStore.fetchData();
+                            },
+                            child: ListView.builder(
+                              itemCount: news.data?.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final data = news.data?[index];
+                                debugPrint("$data");
 
-                                    ///time like : Just Now, 5 min ago, 1 hour ago
-                                    final fetchedTime =
-                                        DateTime.parse("${data!.time}");
-                                    Duration timeDifference =
-                                        currentTime.difference(fetchedTime);
-                                    debugPrint("$timeDifference");
-                                    String formatFetchedTime(Duration duration) {
-                                      if (duration.inMinutes < 1) {
-                                        return "Just Now";
-                                      } else if (duration.inHours < 1) {
-                                        return "${duration.inMinutes} min ago";
-                                      } else if (duration.inHours == 1) {
-                                        return "1 hour ago";
-                                      } else if (duration.inHours < 24) {
-                                        return "${duration.inHours} hour ago";
-                                      } else {
-                                        return "Long time ago";
-                                      }
-                                    }
+                                ///time like : Just Now, 5 min ago, 1 hour ago
+                                final fetchedTime =
+                                    DateTime.parse("${data!.time}");
+                                Duration timeDifference =
+                                    currentTime.difference(fetchedTime);
+                                debugPrint("$timeDifference");
+                                String formatFetchedTime(Duration duration) {
+                                  if (duration.inMinutes < 1) {
+                                    return "Just Now";
+                                  } else if (duration.inHours < 1) {
+                                    return "${duration.inMinutes} min ago";
+                                  } else if (duration.inHours == 1) {
+                                    return "1 hour ago";
+                                  } else if (duration.inHours < 24) {
+                                    return "${duration.inHours} hour ago";
+                                  } else {
+                                    return "Long time ago";
+                                  }
+                                }
 
-                                    correctTime =
-                                        formatFetchedTime(timeDifference);
-                                    debugPrint(correctTime);
+                                String correctTime =
+                                    formatFetchedTime(timeDifference);
+                                debugPrint(correctTime);
 
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          dataModelStore
-                                              .onItemSelected(news.data![index]);
-                                          // debugPrint(dataModelStore.selectedItem?.images);
-                                          Navigator.pushNamed(
-                                            context,
-                                            '/SelectedNews',
-                                          );
-                                        },
-                                        child: Column(
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      dataModelStore
+                                          .onItemSelected(news.data![index]);
+                                      // debugPrint(dataModelStore.selectedItem?.images);
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/SelectedNews',
+                                      );
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(height: 8),
+                                        ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10)),
+                                            child: Hero(
+                                                tag: '${data.images}',
+                                                child: Image.network(
+                                                  data.images ?? "",
+                                                ))),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8, bottom: 3),
+                                          child: Text(data.title ?? "",
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500)),
+                                        ),
+                                        Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const SizedBox(height: 8),
-                                            ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                child: Hero(
-                                                    tag: '${data.images}',
-                                                    child: Image.network(
-                                                      data.images ?? "",
-                                                    ))),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8, bottom: 3),
-                                              child: Text(data.title ?? "",
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ),
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    const Image(
-                                                      image: AssetImage(
-                                                          "assets/images/person.png"),
-                                                      height: 30,
-                                                      color: Colors.white70,
-                                                      width: 30,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text("by ${data.author}",
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.white70)),
-                                                  ],
+                                                const Image(
+                                                  image: AssetImage(
+                                                      "assets/images/person.png"),
+                                                  height: 30,
+                                                  color: Colors.white70,
+                                                  width: 30,
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.watch_later_outlined,
-                                                      color: Colors.white70,
-                                                      size: 25,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(correctTime!,
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.white70)),
-                                                  ],
-                                                ),
+                                                const SizedBox(width: 5),
+                                                Text("by ${data.author}",
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 15,
+                                                        color: Colors.white70)),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.watch_later_outlined,
+                                                  color: Colors.white70,
+                                                  size: 25,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(correctTime,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 15,
+                                                        color: Colors.white70)),
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                          }
-                        },
-                        /*child: Observer(
-                      builder: (_) {
-
-                        final futureList = dataModelStore.listOfDataFromFuture;
-                        switch (futureList!.status) {
-
-                          ///if future data is pending
-                          case FutureStatus.pending:
-                            return const Center(
-                              child: LinearProgressIndicator(color: Colors.red),
-                            );
-
-                            ///if future data is rejected
-                          case FutureStatus.rejected:
-                            debugPrint(futureList.error);
-                            debugPrint(futureList.result);
-                            return Center(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Failed to load items ",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.w500,
+                                        const SizedBox(height: 8),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  FilledButton(
-                                      onPressed: () {},
-                                      child: const Text(
-                                        "Tap to Retry",
-                                        style:
-                                            TextStyle(fontWeight: FontWeight.bold),
-                                      ))
-                                ],
-                              ),
-                            );
-
-                            ///if future gets the response
-                          case FutureStatus.fulfilled:
-
-                            final NewsModel news = futureList.result;
-                            return RefreshIndicator(
-                              onRefresh: () {
-                                return dataModelStore.fetchData();
+                                );
                               },
-                              child: ListView.builder(
-                                itemCount: news.data?.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final data = news.data?[index];
-                                  debugPrint("$data");
-
-                                  ///time like : Just Now, 5 min ago, 1 hour ago
-                                  final fetchedTime =
-                                      DateTime.parse("${data!.time}");
-                                  Duration timeDifference =
-                                      currentTime.difference(fetchedTime);
-                                  debugPrint("$timeDifference");
-                                  String formatFetchedTime(Duration duration) {
-                                    if (duration.inMinutes < 1) {
-                                      return "Just Now";
-                                    } else if (duration.inHours < 1) {
-                                      return "${duration.inMinutes} min ago";
-                                    } else if (duration.inHours == 1) {
-                                      return "1 hour ago";
-                                    } else if (duration.inHours < 24) {
-                                      return "${duration.inHours} hour ago";
-                                    } else {
-                                      return "Long time ago";
-                                    }
-                                  }
-
-                                  correctTime = formatFetchedTime(timeDifference);
-                                  debugPrint(correctTime);
-
-                                  return Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        dataModelStore
-                                            .onItemSelected(news.data![index]);
-                                        // debugPrint(dataModelStore.selectedItem?.images);
-                                        Navigator.pushNamed(
-                                          context,
-                                          '/SelectedNews',
-                                        );
-                                      },
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          const SizedBox(height: 8),
-                                          ClipRRect(
-                                              borderRadius: const BorderRadius.all(
-                                                  Radius.circular(10)),
-                                              child: Hero(
-                                                  tag: '${data.images}',
-                                                  child: Image.network(
-                                                    data.images ?? "",
-                                                  ))),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 8, bottom: 3),
-                                            child: Text(data.title ?? "",
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w500)),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  const Image(
-                                                    image: AssetImage(
-                                                        "assets/images/person.png"),
-                                                    height: 30,
-                                                    color: Colors.white70,
-                                                    width: 30,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  Text("by ${data.author}",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 15,
-                                                          color: Colors.white70)),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.watch_later_outlined,
-                                                    color: Colors.white70,
-                                                    size: 25,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  Text(correctTime!,
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 15,
-                                                          color: Colors.white70)),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                        }
-                      },
-                  ),*/
-                      ),
-                    ),
+                            ),
+                          );
+                      }
+                    },
                   ),
                 ],
               ),

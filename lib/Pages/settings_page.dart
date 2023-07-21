@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
           backgroundColor: Colors.black,
           foregroundColor: Colors.white ,
 
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             systemNavigationBarColor: Colors.black,
             statusBarColor: Colors.black,
             statusBarIconBrightness: Brightness.light,

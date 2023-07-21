@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_mobx/Pages/favourites_page.dart';
 import 'package:news_app_mobx/Pages/news_page.dart';
 import 'package:news_app_mobx/Pages/selected_news_page.dart';
 import 'package:news_app_mobx/Pages/settings_page.dart';
 import 'package:news_app_mobx/Store/data_model_store.dart';
 import 'package:news_app_mobx/Style/style.dart';
-import 'package:news_app_mobx/pagination/pagination_cubit.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -33,11 +31,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider.value(value: dataModelStore),
-        Provider(
-          create: (BuildContext context) {
-            return PaginationCubit();
-          },
-        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

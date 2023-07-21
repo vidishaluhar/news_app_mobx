@@ -1,10 +1,6 @@
 ///Fetched data from Api using Retrofit
 
 import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:news_app_mobx/Fetch%20Data/retry_interceptor.dart';
 import 'package:news_app_mobx/Model/news_model.dart';
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
@@ -14,7 +10,7 @@ part 'fetch_data_from_api.g.dart';
 @RestApi(baseUrl: "https://inshorts-news.vercel.app")
 abstract class DataModelApi {
   factory DataModelApi(Dio dio, {String? baseUrl}) {
-    Connectivity connectivity = Connectivity();
+    // Connectivity connectivity = Connectivity();
     /*StreamSubscription connectivitySubscription;
     Completer completer=Completer();*/
 
@@ -23,7 +19,7 @@ abstract class DataModelApi {
         receiveTimeout: const Duration(seconds: 5),
         contentType: 'application/json');
 
-    /*dio.interceptors *//*..add(LogInterceptor())*//*
+    /*dio.interceptors */ /*..add(LogInterceptor())*/ /*
       ..add(ConnectivityRequestRetry(dio: dio, connectivity: connectivity));*/
 
     /*dynamic requestInterceptor(RequestOptions options) {

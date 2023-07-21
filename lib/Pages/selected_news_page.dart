@@ -19,7 +19,7 @@ class SelectedNewsPage extends StatelessWidget {
           automaticallyImplyLeading: true,
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           systemNavigationBarColor: Colors.black,
           statusBarColor: Colors.black,
           statusBarIconBrightness: Brightness.light,
